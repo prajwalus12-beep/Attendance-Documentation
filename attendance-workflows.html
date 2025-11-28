@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance Workflow Documentation - VSware & Tyro</title>
+  <style>
+    :root {
+      --bg: #fff;
+      --text: #1a1a1a;
+      --nav-bg: #2c3e50;
+      --nav-text: #ecf0f1;
+      --card-bg: #f8f9fa;
+      --border: #ddd;
+      --accent: #3498db;
+      --success: #27ae60;
+      --warning: #f39c12;
+      --code-bg: #f4f4f4
+    }
+
+    [data-theme="dark"] {
+      --bg: #1a1a1a;
+      --text: #e0e0e0;
+      --nav-bg: #0d1117;
+      --nav-text: #c9d1d9;
+      --card-bg: #161b22;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --code-bg: #0d1117
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background: var(--bg);
+      transition: background .3s, color .3s
+    }
+
+    nav {
+      background: var(--nav-bg);
+      color: var(--nav-text);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap
+    }
+
+    nav a {
+      color: var(--nav-text);
+      text-decoration: none;
+      margin: 0 .5rem;
+      padding: .5rem;
+      border-radius: 4px;
+      transition: background .2s
+    }
+
+    nav a:hover {
+      background: rgba(255, 255, 255, .1)
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--accent), #9b59b6);
+      color: #fff;
+      padding: 3rem 2rem;
+      text-align: center
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 2rem
+    }
+
+    .section {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 2rem 0;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, .05)
+    }
+
+    h2 {
+      color: var(--accent);
+      margin: 1.5rem 0 1rem;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: .5rem
+    }
+
+    h3 {
+      margin: 1rem 0 .5rem;
+      color: var(--text)
+    }
+
+    .diagram-container {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+      margin: 1.5rem 0;
+      text-align: center
+    }
+
+    .diagram-svg {
+      max-width: 100%;
+      height: auto;
+      border-radius: 4px
+    }
+
+    .diagram-error {
+      padding: 2rem;
+      color: #e74c3c;
+      background: #fee;
+      border-radius: 4px
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0
+    }
+
+    table th,
+    table td {
+      padding: .75rem;
+      border: 1px solid var(--border);
+      text-align: left
+    }
+
+    table th {
+      background: var(--accent);
+      color: #fff
+    }
+
+    .collapsible {
+      cursor: pointer;
+      background: var(--warning);
+      color: #fff;
+      padding: 1rem;
+      border: none;
+      width: 100%;
+      text-align: left;
+      border-radius: 4px;
+      margin: .5rem 0;
+      font-size: 1rem;
+      font-weight: 600;
+      transition: opacity .2s
+    }
+
+    .collapsible:hover {
+      opacity: .9
+    }
+
+    .collapsible:after {
+      content: '▼';
+      float: right;
+      transition: transform .3s
+    }
+
+    .collapsible.active:after {
+      transform: rotate(-180deg)
+    }
+
+    .content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height .3s ease;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-top: none;
+      border-radius: 0 0 4px 4px
+    }
+
+    .content.show {
+      max-height: 1000px;
+      padding: 1rem
+    }
+
+    ol,
+    ul {
+      margin: 1rem 0 1rem 2rem
+    }
+
+    li {
+      margin: .5rem 0
+    }
+
+    .glossary-term {
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: 1rem
+    }
+
+    #darkModeToggle {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: .5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: .875rem
+    }
+
+    footer {
+      background: var(--nav-bg);
+      color: var(--nav-text);
+      padding: 2rem;
+      text-align: center;
+      margin-top: 3rem
+    }
+
+    @media print {
+
+      nav,
+      footer,
+      #darkModeToggle {
+        display: none
+      }
+
+      .content {
+        max-height: none !important
+      }
+
+      .section {
+        page-break-inside: avoid
+      }
+    }
+
+    @media(max-width:768px) {
+      .hero h1 {
+        font-size: 2rem
+      }
+
+      .container {
+        padding: 0 1rem
+      }
+
+      nav {
+        padding: 1rem
+      }
+
+      nav a {
+        margin: .25rem
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav>
+    <div>
+      <strong>Attendance Workflows</strong>
+      <a href="#overview">Overview</a>
+      <a href="#am-absence">AM Absence</a>
+      <a href="#pm-absence">PM Absence</a>
+      <a href="#am-late">AM Late</a>
+      <a href="#pm-late">PM Late</a>
+      <a href="#am-check">AM Check</a>
+      <a href="#pm-check">PM Check</a>
+      <a href="#am-ptl">AM PTL</a>
+      <a href="#pm-ptl">PM PTL</a>
+      <a href="#glossary">Glossary</a>
+    </div>
+    <button id="darkModeToggle" onclick="toggleDarkMode()">🌓 Dark Mode</button>
+  </nav>
+
+  <div class="hero">
+    <h1>Attendance & Absence Management Workflows</h1>
+    <p>VSware & Tyro System Documentation</p>
+    <p><small>Last Updated: November 2024</small></p>
+  </div>
+
+  <div class="container">
+
+    <section id="overview" class="section">
+      <h2>Overview</h2>
+      <p>This document provides complete workflows for managing student attendance, absences, late arrivals, and
+        Permission To Leave (PTL) requests across AM and PM sessions in VSware and Tyro systems.</p>
+
+      <h3>Quick Summary</h3>
+      <p>The attendance system automates parent notifications, tracks student status, manages absence request forms
+        (ARF), and ensures accurate record-keeping through automated writebacks and 4 PM daily reconciliation.</p>
+
+      <h3>Key Workflows</h3>
+      <ul>
+        <li><a href="#am-absence">AM Absence Processing</a> - ARF generation and parent responses</li>
+        <li><a href="#pm-absence">PM Absence Cross-check</a> - AM session dependency review</li>
+        <li><a href="#am-late">Late Note Requests (LNR)</a> - Unexplained vs explained lates</li>
+        <li><a href="#am-check">Please Check Workflow</a> - Staff verification and resolution</li>
+        <li><a href="#am-ptl">PTL Approval</a> - Teacher authorization for early dismissal</li>
+      </ul>
+    </section>
+
+    <div id="workflow-sections"></div>
+
+    <section id="glossary" class="section">
+      <h2>Glossary</h2>
+
+      <div class="glossary-term">ARF (Absence Request Form)</div>
+      <p>A form sent to parents when a student is marked as unexplained absent during roll call.</p>
+
+      <div class="glossary-term">LNR (Late Note Request)</div>
+      <p>A notification sent to parents when a student arrives late without a pre-submitted late note.</p>
+
+      <div class="glossary-term">PTL (Permission To Leave)</div>
+      <p>A request for a student to leave early or during a session.</p>
+
+      <div class="glossary-term">DSI (Digital Sign-In)</div>
+      <p>The digital system students use to sign in when late or sign out when leaving early.</p>
+
+      <div class="glossary-term">Writeback</div>
+      <p>The system's process of updating attendance records in the main database.</p>
+
+      <div class="glossary-term">4 PM Reconciliation</div>
+      <p>An automated daily system check at 4 PM that reviews all records and triggers writebacks for unresolved cases.
+      </p>
+    </section>
+
+  </div>
+
+  <footer>
+    <p><strong>VSware & Tyro Attendance Documentation</strong></p>
+    <p><small>Complete workflow documentation with visual diagrams</small></p>
+  </footer>
+
+  <script>
+    function toggleDarkMode() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    }
+
+    (function () {
+      const saved = localStorage.getItem('theme');
+      const preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', saved || preferred);
+    })();
+
+    function toggleCollapsible(btn) {
+      btn.classList.toggle('active');
+      const content = btn.nextElementSibling;
+      content.classList.toggle('show');
+    }
+
+    const workflows = [
+      { id: 'am-absence', title: '1. AM Session Attendance & Absence Reporting', purpose: 'Manages morning attendance roll call, generates absence request forms (ARF) for unexplained absences, processes parent responses, and performs automated writebacks.', svgPath: 'SVG/AM session absence.svg', flowSummary: ['Teacher completes AM roll call', 'System fetches attendance records', 'If student is present → No action required', 'If student is unexplained absent → Check if Absence Requests enabled', 'System checks for existing absentee note before roll call', 'Send AM ARF to parent (if no note exists)', 'Parent responds: Absentee / Late / Please Check / Pending', 'Parents can submit absentee note manually at any time', 'At 4 PM daily: System rechecks all records and triggers writebacks'], rules: ['ARF only sent if Absence Requests are enabled for the student', 'Existing absentee notes prevent ARF from being sent', 'Manual absentee notes override ARF status', 'Daily 4 PM reconciliation ensures no records are missed'] },
+      { id: 'pm-absence', title: '2. PM Session Attendance & Absence Reporting', purpose: 'Handles afternoon attendance, cross-references AM session data, manages PM ARF generation with AM dependency checks, and processes parent responses with 1-hour writeback delay.', svgPath: 'SVG/PM Session Absence Send ARF.svg', flowSummary: ['Teacher completes PM roll call', 'System fetches PM attendance', 'If unexplained absent → System reviews AM session', 'Parent submitted AM absence note → Auto writeback explained PM absence', 'AM ARF sent → Check parent response (Absentee/Late/Please Check/Pending)', 'Send PM ARF to parent (if AM allows)', 'Parent responds to PM ARF', '4 PM daily reconciliation', 'PM writeback has 1-hour delay'], rules: ['PM processing depends on AM session status', 'Pending AM ARF blocks PM ARF (Quick ARF setting shows pop-up warnings)', 'AM "Absentee" response automatically explains both sessions', 'PM writebacks include 1-hour delay before appearing in system'] },
+      { id: 'am-late', title: '3. AM Session Late Reporting Process', purpose: 'Handles late arrivals during AM session, manages Digital Sign-In (DSI), generates Late Note Requests (LNR), and processes parent late note submissions.', svgPath: 'SVG/AM Session Late New.svg', flowSummary: ['Student marked absent, AM ARF created', 'System checks if student was late before roll call', 'If late: Student signs in DSI → Unexplained Late Writeback → LNR sent', 'Parent submits LNR (Authorised) → Explained Late Writeback', 'If not late: Send AM ARF with Late option', 'DSI Processing: Sign-in or manual marking → Explained Late Writeback', 'Delay Writeback Setting affects timing', '4 PM daily recheck for unexplained lates'], rules: ['LNR only sent if Late Note Requests are enabled', 'Disabled Late Note Requests → Student marked "Skipped"', 'DSI sign-in automatically generates explained late writeback', 'Delay Writeback setting postpones writeback until configured delay expires'] },
+      { id: 'pm-late', title: '4. PM Session Late Reporting Process', purpose: 'Manages PM late arrivals with AM session cross-referencing, enforces one-late-note-per-day rule, handles DSI sign-ins, and manages past-date late note submission settings.', svgPath: 'SVG/PM Session Late New.svg', flowSummary: ['Student absent, PM ARF created', 'If late before PM roll call → DSI sign-in → Unexplained Late Writeback → LNR sent', 'Parent submits LNR (Authorised) → Explained Late Writeback', 'Review AM session for existing late note (one-late-per-day rule)', 'If AM late note exists and student arrives PM → Dual writeback (PM Late + AM Absent)', 'Send PM ARF if AM allows', 'Delay Writeback setting applies', '4 PM daily recheck'], rules: ['One late note per day - Parents can only submit one late note daily', 'AM late note covers both sessions if student arrives PM', 'Past-date Late Note setting controls LNR timeout behavior', 'Dual writeback: PM Late + AM Absent when AM late note used for PM arrival'] },
+      { id: 'am-check', title: '5. AM Session "Please Check" Absence Reporting', purpose: 'Handles parent "Please Check" responses requiring staff verification, supports four resolution paths (Present, Late, School Activity, Still Absent), and manages partial vs full session school activities.', svgPath: 'SVG/AM Session Please Check.svg', flowSummary: ['Student marked unexplained absent', 'AM ARF sent to parent', 'Parent selects "Please Check" → Staff review required', 'Staff Path 1: Confirms Present → Present Writeback', 'Staff Path 2: Confirms Late → Unexplained Late Writeback → LNR sent', 'Staff Path 3: School Activity → Full/Partial session check → Writeback or comment', 'Staff Path 4: Still Absent → Re-send ARF', '4 PM daily recheck for unexplained records'], rules: ['"Please Check" requires mandatory staff verification', 'School Activity code only replaces absence if activity covers entire session', 'Partial school activities add comment but preserve original absence/late code', 'Staff can re-send ARF if student confirmed absent after review'] },
+      { id: 'pm-check', title: '6. PM Session "Please Check" Absence Reporting', purpose: 'Mirrors AM "Please Check" workflow for PM session with identical four-path staff verification process.', svgPath: 'SVG/PM Session Please Check.svg', flowSummary: ['Student marked unexplained absent (PM)', 'PM ARF sent to parent', 'Parent selects "Please Check" → Staff review', 'Four staff resolution paths: Present / Late / School Activity / Still Absent', 'Same logic as AM session applied to PM records', '4 PM daily recheck'], rules: ['Same rules as AM session, applied to PM records', 'School Activity logic: Full session coverage → code change, Partial → comment only', 'LNR workflow triggered if staff confirms late', '4 PM reconciliation ensures all records updated'] },
+      { id: 'am-ptl', title: '7. AM Session PTL (Permission To Leave) Process', purpose: 'Manages AM session Permission To Leave requests, handles teacher approval for parent-submitted PTL, controls DSI sign-out/sign-in with time interval flexibility, and implements ARF→PTL conversion rule.', svgPath: 'SVG/AM Session PTL Process.svg', flowSummary: ['PTL note created (parent-submitted or teacher-added)', 'Parent-submitted PTL requires teacher approval', 'ARF→PTL conversion: If PTL spans AM roll call and ARF not sent within 30 min', 'Teacher approves → Student allowed DSI Leaving and Return', 'Teacher-added PTL → Auto-approved', 'DSI Process: Sign in → Leaving → Return', 'System updates class attendance code', 'Sign-out/in timestamps recorded in comments for audit'], rules: ['ARF→PTL conversion automatic when PTL spans AM roll call and ARF not sent within 30 min', 'Parent-submitted PTL requires teacher approval before DSI access', 'Teacher-added PTL grants immediate DSI access', 'DSI time interval setting provides flexibility around exact PTL window', 'All sign-out/sign-in times recorded as comments for audit'] },
+      { id: 'pm-ptl', title: '8. PM Session PTL (Permission To Leave) Process', purpose: 'Mirrors AM PTL workflow for PM session with identical approval, DSI, and ARF→PTL conversion logic.', svgPath: 'SVG/PM Session Absence PTL Process.svg', flowSummary: ['PTL note created (parent or teacher)', 'Same ARF→PTL conversion rule as AM', 'Teacher approval required for parent-submitted PTL', 'DSI Leaving and Return process', 'Attendance code updates and timestamp comments', 'Same time interval flexibility as AM session'], rules: ['Same rules as AM PTL session', 'Teacher approval workflow identical to AM', 'DSI sign-out/in recorded with timestamps', 'Time interval settings apply consistently'] }
+    ];
+
+    function renderWorkflows() {
+      const container = document.getElementById('workflow-sections');
+      workflows.forEach(workflow => {
+        const section = document.createElement('section');
+        section.id = workflow.id;
+        section.className = 'section';
+        section.innerHTML = `
+<h2>${workflow.title}</h2>
+<h3>Purpose</h3>
+<p>${workflow.purpose}</p>
+<div class="diagram-container">
+<h3>Workflow Diagram</h3>
+<img class="diagram-svg" src="${workflow.svgPath}" alt="${workflow.title} Diagram" onerror="this.parentElement.innerHTML='<div class=diagram-error>⚠️ Unable to load diagram: ${workflow.svgPath}</div>'">
+</div>
+<h3>Flow Summary</h3>
+<ol>${workflow.flowSummary.map(step => `<li>${step}</li>`).join('')}</ol>
+<h3>System Rules</h3>
+<ul>${workflow.rules.map(rule => `<li>${rule}</li>`).join('')}</ul>
+<h3>Role Responsibilities</h3>
+<table>
+<tr><th>System</th><th>Staff</th><th>Parents</th></tr>
+<tr>
+<td>Automated processing, notifications, writebacks, reconciliation</td>
+<td>Roll call, verification, DSI manual marking, approvals</td>
+<td>Respond to ARF/LNR, submit notes, PTL requests</td>
+</tr>
+</table>
+<button class="collapsible" onclick="toggleCollapsible(this)">Edge Cases & Notes</button>
+<div class="content">
+<ul>
+<li><strong>Setting Dependencies:</strong> Various features can be enabled/disabled per student</li>
+<li><strong>Timing Rules:</strong> Delay Writeback, 4 PM reconciliation, 1-hour PM delay</li>
+<li><strong>Cross-Session Logic:</strong> AM status affects PM processing</li>
+<li><strong>Audit Trail:</strong> All timestamps and actions recorded</li>
+</ul>
+</div>
+`;
+        container.appendChild(section);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', renderWorkflows);
+  </script>
+
+</body>
+
+</html>
